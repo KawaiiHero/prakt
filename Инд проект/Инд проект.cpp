@@ -81,7 +81,7 @@ int main() {
         printf("Текст успешно записан в файл 'output.txt'\n");
     }
     else {
-        printf("Неверный режим вывода!\n");
+        printf("Неверный режим вывода\n");
         return 1;
     }
 
