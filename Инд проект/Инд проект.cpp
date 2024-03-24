@@ -2,23 +2,18 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <windows.h>
+#include <ctype.h>
 
 #define MAX_LENGTH 1000
 
-void caesarCipher(char text[], int key, int mode) {
+void caesarCipher(char text[], int key) {
     int i = 0;
     while (text[i] != '\0') {
         if (text[i] >= 'а' && text[i] <= 'я') {
-            if (mode == 1)
-                text[i] = 'а' + (text[i] - 'а' + key) % 32;
-            else if (mode == 2)
-                text[i] = 'а' + (text[i] - 'а' - key + 32) % 32;
+            text[i] = tolower('а' + (text[i] - 'а' + key) % 32);
         }
         else if (text[i] >= 'А' && text[i] <= 'Я') {
-            if (mode == 1)
-                text[i] = 'А' + (text[i] - 'А' + key) % 32;
-            else if (mode == 2)
-                text[i] = 'А' + (text[i] - 'А' - key + 32) % 32;
+            text[i] = toupper('А' + (text[i] - 'А' + key) % 32);
         }
         i++;
     }
@@ -29,15 +24,16 @@ int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(CP_UTF8);
 
-    int mode, key;
+    int ecrypt_mode, key, mode;
     char text[MAX_LENGTH];
 
     printf("Выберите режим:\n1. Шифрование\n2. Дешифрование\n");
-    scanf_s("%d", &mode);
+    scanf_s("%d", &ecrypt_mode);
 
     printf("Введите ключ шифрования: ");
     scanf_s("%d", &key);
-
+    if (ecrypt_mode == 2)
+        key = -key;
     printf("Выберите режим ввода текста:\n1. Через консоль\n2. Из файла\n");
     scanf_s("%d", &mode);
 
@@ -65,11 +61,11 @@ int main() {
     scanf_s("%d", &mode);
 
     if (mode == 1) {
-        caesarCipher(text, key, mode);
+        caesarCipher(text, key);
         printf("Результат: %s\n", text);
     }
     else if (mode == 2) {
-        caesarCipher(text, key, mode);
+        caesarCipher(text, key);
         FILE* file;
         fopen_s(&file, "output.txt", "w");
         if (file == NULL) {
